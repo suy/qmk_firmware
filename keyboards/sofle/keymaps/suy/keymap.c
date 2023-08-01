@@ -174,17 +174,15 @@ static void render_logo(void) {
 static void print_status_narrow(void) {
     // TODO: remove eventually. I don't think I'll ever change this mode.
     oled_write_ln_P(PSTR("MODE"), false);
-    oled_write_ln_P(PSTR(""), false);
     if (!keymap_config.swap_lctl_lgui) {
         oled_write_ln_P(PSTR("Win"), false);
     } else {
         oled_write_ln_P(PSTR("Mac"), false);
     }
 
-    oled_write_P(PSTR("\n\n"), false);
+    oled_write_P(PSTR("\n"), false);
 
     oled_write_ln_P(PSTR("LYER"), false);
-    oled_write_ln_P(PSTR(""), false);
     switch (get_highest_layer(layer_state)) {
         case _COLEMAK:
         case _QWERTY:
@@ -202,7 +200,28 @@ static void print_status_narrow(void) {
         default:
             oled_write_ln_P(PSTR("Undef"), false);
     }
-    oled_write_P(PSTR("\n\n"), false);
+
+    oled_write_P(PSTR("\n"), false);
+
+    // Print whether a modifier is active and if in one-shot state.
+    uint8_t mods = get_mods();
+    uint8_t ones = get_oneshot_mods();
+    uint8_t both = mods|ones;
+
+    oled_write_P((both & MOD_MASK_SHIFT) ? PSTR("S") : PSTR(" "), false);
+    oled_write_P((ones & MOD_MASK_SHIFT) ? PSTR("1") : PSTR(" "), false);
+    oled_write_P(PSTR(" "), false);
+    oled_write_P((both & MOD_MASK_CTRL) ? PSTR("C") : PSTR(" "), false);
+    oled_write_P((ones & MOD_MASK_CTRL) ? PSTR("1") : PSTR(" "), false);
+    oled_write_P(PSTR("\n"), false);
+    oled_write_P((both & MOD_MASK_GUI) ? PSTR("G") : PSTR(" "), false);
+    oled_write_P((ones & MOD_MASK_GUI) ? PSTR("1") : PSTR(" "), false);
+    oled_write_P(PSTR(" "), false);
+    oled_write_P((both & MOD_MASK_ALT) ? PSTR("A") : PSTR(" "), false);
+    oled_write_P((ones & MOD_MASK_ALT) ? PSTR("1") : PSTR(" "), false);
+
+    oled_write_P(PSTR("\n"), false);
+
     led_t led_usb_state = host_keyboard_led_state();
     if (led_usb_state.caps_lock) {
         oled_write_ln_P(PSTR("CAPS LOCK!"), false);
