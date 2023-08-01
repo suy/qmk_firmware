@@ -37,6 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            `----------------------------------'           '------''---------------------------'
  */
 
+// Home row modifier keys with dual function.
 #define DUAL_A LGUI_T(KC_A)
 #define DUAL_S LALT_T(KC_S)
 #define DUAL_D LCTL_T(KC_D)
@@ -47,13 +48,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define DUAL_L LALT_T(KC_L)
 #define DUAL__ RGUI_T(KC_SCLN)
 
+// One shot modifiers and layers
+#define OSMC   OSM(MOD_LCTL)
+#define OSMS   OSM(MOD_LSFT)
+#define OSMA   OSM(MOD_LALT)
+#define OSMG   OSM(MOD_LGUI)
+#define OSMR   OSM(MOD_RSFT)
+
+#define OSLOW  OSL(_LOWER)
+#define OSRAI  OSL(_RAISE)
+
 [_QWERTY] = LAYOUT(
   KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_DEL,
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_BSPC,
   KC_ESC,   DUAL_A, DUAL_S,  DUAL_D,  DUAL_F,  KC_G,                     KC_H,    DUAL_J,  DUAL_K,  DUAL_L,  DUAL__,KC_QUOT,
-  KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,   XXXXXXX, KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT,
-                 KC_LGUI,KC_LALT,KC_LCTL, MO(_LOWER), KC_SPC,      KC_ENT,  MO(_RAISE), KC_RCTL, KC_RALT, KC_RGUI
+  OSMS,     KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,   KC_MUTE, XXXXXXX, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
+                    OSMC,    OSMG,    OSMA,    OSLOW,  KC_SPC,  KC_ENT,  OSRAI,   KC_RCTL, KC_RALT, KC_RGUI
 ),
+
+
 /*
  * COLEMAK
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -77,6 +90,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,      XXXXXXX,KC_K,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT,
                  KC_LGUI,KC_LALT,KC_LCTL,MO(_LOWER), KC_ENT,        KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT, KC_RGUI
 ),
+
+
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |  F12 |  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
@@ -98,6 +113,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, KC_BSLS, KC_PLUS, KC_MINS, KC_EQUAL,
                     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
+
+
 /* RAISE
  * ,----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
