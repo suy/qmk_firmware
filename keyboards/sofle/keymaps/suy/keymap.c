@@ -74,15 +74,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |  F12 |  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |   `  |   !  |   @  |   #  |   $  |   %  |                    |   ^  |   &  |   *  |   (  |   )  |      |
+ * |   ~  |   !  |   @  |   #  |   $  |   %  |                    |   ^  |   &  |   *  |   (  |   )  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |   1  |   2  |   3  |   4  |   5  |-------.    ,-------| LEFT | DOWN |  UP  | RIGHT|   [  |   ]  |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   \  |   +  |   -  |   =  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
+ *            |      |      |      |LOWER | /       /       \   _  \  |RAISE | RCTR | RAlt | RGUI |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
- *            `----------------------------------'           '------''---------------------------'
+ *            `----------------------------------'            '------''---------------------------'
  */
 
 // Home row modifier keys with dual function.
@@ -101,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   _______, DUAL_1,  DUAL_2,  DUAL_3,  DUAL_4,  KC_5,                      KC_LEFT, DUAL_CD, DUAL_CU, DUAL_CR, DUAL_LB, KC_RBRC,
   _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, KC_BSLS, KC_PLUS, KC_MINS, KC_EQUAL,
-                    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+                    _______, _______, _______, _______, _______, KC_UNDS, _______, _______, _______, _______
 ),
 
 
@@ -232,6 +232,11 @@ static void print_status_narrow(void) {
     if (led_usb_state.caps_lock) {
         oled_write_ln_P(PSTR("CAPS LOCK!"), false);
     } else { // Needed to clear the previous caps lock message
+        oled_write_P(PSTR("\n\n"), false);
+    }
+    if (is_caps_word_on()) {
+        oled_write_ln_P(PSTR("CAPS WORD!"), false);
+    } else { // Needed to clear the previous caps word message
         oled_write_P(PSTR("\n\n"), false);
     }
 }
