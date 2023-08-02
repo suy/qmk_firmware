@@ -44,22 +44,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define DUAL_L LALT_T(KC_L)
 #define DUAL__ RGUI_T(KC_SCLN)
 
-// One shot modifiers and layers
+// One shot modifiers.
 #define OSMC   OSM(MOD_LCTL)
 #define OSMS   OSM(MOD_LSFT)
 #define OSMA   OSM(MOD_LALT)
 #define OSMG   OSM(MOD_LGUI)
 #define OSMR   OSM(MOD_RSFT)
 
+// One shot layers (unused, as they get stuck on a hold, and one has to be
+// forced to press a key or wait for the timeout if holds it accidentally).
 #define OSLOW  OSL(_LOWER)
 #define OSRAI  OSL(_RAISE)
+
+// Layer change with Tap Toggle. Keeps active only while you hold it (like MO),
+// but can be locked as active if tapping it TAPPING_TOGGLE times (default=5).
+#define LOWERL TT(_LOWER)
+#define RAISEL TT(_RAISE)
 
 [_BASE] = LAYOUT(
   KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_DEL,
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_BSPC,
   KC_ESC,   DUAL_A, DUAL_S,  DUAL_D,  DUAL_F,  KC_G,                     KC_H,    DUAL_J,  DUAL_K,  DUAL_L,  DUAL__,KC_QUOT,
   OSMS,     KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,   KC_MUTE, XXXXXXX, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
-                    OSMC,    OSMG,    OSMA,    OSLOW,  KC_SPC,  KC_ENT,  OSRAI,   KC_RCTL, KC_RALT, KC_RGUI
+                    OSMC,    OSMG,    OSMA,    LOWERL, KC_SPC,  KC_ENT,  RAISEL,  KC_RCTL, KC_RALT, KC_RGUI
 ),
 
 
