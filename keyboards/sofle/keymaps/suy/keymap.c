@@ -157,9 +157,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 
+// Left encoder works like the dial in the car radio: clockwise is volume up.
+// Right encoder work like the PageUp/Down keys placement. Turning "to the
+// right" (clockwise) is going forward, so page down, and is also the key to the
+// right in some laptop's keyboard, like my Thinkpad.
 #ifdef ENCODER_MAP_ENABLE
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_PGDN, KC_PGUP) },
+    [_BASE]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_LOWER]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
     [_RAISE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
     [_ADJUST]  = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) }
