@@ -189,22 +189,24 @@ static void print_status_narrow(void) {
 
     oled_write_P(PSTR("\n"), false);
 
-    oled_write_ln_P(PSTR("LYER"), false);
+    // NB: Lines with 5 characters dont't have a newline, because the text fills
+    // the whole line by itself, and the next line would get an extra space.
+    oled_write_P(PSTR("LAYER"), false);
     switch (get_highest_layer(layer_state)) {
         case _BASE:
             oled_write_ln_P(PSTR("Base"), false);
             break;
         case _RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
+            oled_write_P(PSTR("Raise"), false);
             break;
         case _LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
+            oled_write_P(PSTR("Lower"), false);
             break;
         case _ADJUST:
-            oled_write_ln_P(PSTR("Adjst"), false);
+            oled_write_P(PSTR("Adjst"), false);
             break;
         default:
-            oled_write_ln_P(PSTR("Undef"), false);
+            oled_write_P(PSTR("Undef"), false);
     }
 
     oled_write_P(PSTR("\n"), false);
