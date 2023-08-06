@@ -22,3 +22,9 @@ for more options.
 #undef ENCODER_RESOLUTION
 #endif
 #define ENCODER_RESOLUTION 4
+
+#define OLED_BRIGHTNESS 75 // 0 to 255
+#define OLED_FADE_OUT
+#define OLED_FADE_OUT_INTERVAL 10
+#define OLED_SCROLL_TIMEOUT 10000 // 10s
+#define OLED_TIMEOUT 30000 // 30s
