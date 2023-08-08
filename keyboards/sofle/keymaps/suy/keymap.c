@@ -24,6 +24,15 @@ enum custom_keycodes {
 #define TOADJU TO(_ADJUST)
 
 
+// One shot modifiers.
+#define OSMC   OSM(MOD_LCTL)
+#define OSMS   OSM(MOD_LSFT)
+#define OSMA   OSM(MOD_LALT)
+#define OSMG   OSM(MOD_LGUI)
+#define OSMR   OSM(MOD_RSFT)
+#define OSMAG  OSM(MOD_RALT)
+
+
 // Some shortcuts for modified function keys or numbers, which are nice to have
 // here in the Sofle, but not essential, so I won't have them on the Planck.
 #define CT_F1  LCTL(KC_F1)
@@ -79,13 +88,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define DUAL_L LALT_T(KC_L)
 #define DUAL__ RGUI_T(KC_SCLN)
 
-// One shot modifiers.
-#define OSMC   OSM(MOD_LCTL)
-#define OSMS   OSM(MOD_LSFT)
-#define OSMA   OSM(MOD_LALT)
-#define OSMG   OSM(MOD_LGUI)
-#define OSMR   OSM(MOD_RSFT)
-
 // One shot layers (unused, as they get stuck on a hold, and one has to be
 // forced to press a key or wait for the timeout if holds it accidentally).
 #define OSLOW  OSL(_LOWER)
@@ -111,12 +113,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   ~  |   !  |   @  |   #  |   $  |   %  |                    |   ^  |   &  |   *  |   (  |   )  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |   1  |   2  |   3  |   4  |   5  |-------.    ,-------| LEFT | DOWN |  UP  | RIGHT|   [  |   ]  |
+ * |   `  |   1  |   2  |   3  |   4  |   5  |-------.    ,-------|   <  |   -  |   +  |   >  |   [  |   ]  |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   \  |   +  |   -  |   =  |
+ * |      |   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   ,  |   .  |   \  |   =  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            |      |      |      |LOWER | /       /       \   _  \  |RAISE |      |      |      |
- *            |      |      |      |      |/       /         \      \ |      |      |      |      |
+ *            |      |      |      |LOWER | /       /       \   _  \  |RAISE | OSM  |      |      |
+ *            |      |      |      |      |/       /         \      \ |      |AltGr |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
 
@@ -129,14 +131,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define DUAL_CD RSFT_T(KC_DOWN)
 #define DUAL_CU RCTL_T(KC_UP)
 #define DUAL_CR LALT_T(KC_RGHT)
-#define DUAL_LB RGUI_T(KC_LBRC)
+#define DUAL_LB RGUI_T(KC_LBRC)  // The only one used of this block after last changes
 
 [_LOWER] = LAYOUT(
   KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
   KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
-  _______, DUAL_1,  DUAL_2,  DUAL_3,  DUAL_4,  KC_5,                      KC_LEFT, DUAL_CD, DUAL_CU, DUAL_CR, DUAL_LB, KC_RBRC,
-  _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, KC_BSLS, KC_PLUS, KC_MINS, KC_EQUAL,
-                    _______, _______, _______, _______, _______, KC_UNDS, _______, _______, _______, _______
+  KC_GRV,  DUAL_1,  DUAL_2,  DUAL_3,  DUAL_4,  KC_5,                      KC_LT,   KC_MINS, KC_PLUS, KC_GT,   DUAL_LB, KC_RBRC,
+  _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, _______, _______, KC_BSLS, KC_EQUAL,
+                    _______, _______, _______, _______, _______, KC_UNDS, _______, OSMAG,   _______, _______
 ),
 
 
@@ -144,22 +146,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,----------------------------------------.                     ,-----------------------------------------.
  * | CF12 | CF1  | CF2  | CF3  | CF4  | CF5  |                    | CF6  | CF7  | CF8  | CF9  | CF10 | CF11 |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |MoAcc2|MoAcc1|MoAcc0|      |                    |WhLeft|WhDown| WhUp |WhRght|TappUp|      |
+ * |      |      |      |      |      |      |                    | Home |PgDown| PgUp | End  |TappUp|      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |Mouse3|Mouse2|Mouse1|      |-------.    ,-------|MsLeft|MsDown| MsUp |MsRght|TappPr|ToBase|
+ * |      |      |      |      |      |      |-------.    ,-------| LEFT | DOWN |  UP  | RIGHT|TappPr|ToBase|
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------| Home |PgDown| PgUp | End  |TappDo|ToRais|
+ * |      |      |      |      |      |      |-------|    |-------|CLEFT |CDOWN | CUP  |CRIGHT|TappDo|ToRais|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            |      |      |      |LOWER | /       /       \      \  |RAISE |      |      |      |
+ *            |      |      |      |LOWER | /       /       \      \  |RAISE | PLAY | VOL- | VOL+ |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
+
+#define CT_LEFT LCTL(KC_LEFT)
+#define CT_DOWN LCTL(KC_DOWN)
+#define CT_UP   LCTL(KC_UP)
+#define CT_RGHT LCTL(KC_RGHT)
+
 [_RAISE] = LAYOUT(
   CT_F12,  CT_F1,   CT_F2,   CT_F3,   CT_F4,   CT_F5,                     CT_F6,   CT_F7,   CT_F8,   CT_F9,   CT_F10,  CT_F11,
-  _______, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, DT_UP,   _______,
-  _______, XXXXXXX, KC_BTN3, KC_BTN2, KC_BTN1, XXXXXXX,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, DT_PRNT, TOBASE,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_DOWN, TORAIS,
-                    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_UP,   _______,
+  _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, OSMAG,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, DT_PRNT, TOBASE,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, CT_LEFT, CT_DOWN, CT_UP,   CT_RGHT, DT_DOWN, TORAIS,
+                    _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU
 ),
 
 
