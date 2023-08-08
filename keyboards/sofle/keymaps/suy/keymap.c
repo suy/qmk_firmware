@@ -16,6 +16,41 @@ enum custom_keycodes {
 };
 
 
+// Setting a specific layer with TO, to make a layer "stick", and to allow to
+// return back to the base layer, like Miryoku does.
+#define TOBASE TO(_BASE)
+#define TOLOWR TO(_LOWER)
+#define TORAIS TO(_RAISE)
+#define TOADJU TO(_ADJUST)
+
+
+// Some shortcuts for modified function keys or numbers, which are nice to have
+// here in the Sofle, but not essential, so I won't have them on the Planck.
+#define CT_F1  LCTL(KC_F1)
+#define CT_F2  LCTL(KC_F2)
+#define CT_F3  LCTL(KC_F3)
+#define CT_F4  LCTL(KC_F4)
+#define CT_F5  LCTL(KC_F5)
+#define CT_F6  LCTL(KC_F6)
+#define CT_F7  LCTL(KC_F7)
+#define CT_F8  LCTL(KC_F8)
+#define CT_F9  LCTL(KC_F9)
+#define CT_F10 LCTL(KC_F10)
+#define CT_F11 LCTL(KC_F11)
+#define CT_F12 LCTL(KC_F12)
+
+#define OS_1  LGUI(KC_1)
+#define OS_2  LGUI(KC_2)
+#define OS_3  LGUI(KC_3)
+#define OS_4  LGUI(KC_4)
+#define OS_5  LGUI(KC_5)
+#define OS_6  LGUI(KC_6)
+#define OS_7  LGUI(KC_7)
+#define OS_8  LGUI(KC_8)
+#define OS_9  LGUI(KC_9)
+#define OS_0  LGUI(KC_0)
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Base
@@ -107,47 +142,47 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* RAISE
  * ,----------------------------------------.                     ,-----------------------------------------.
- * |      |MoAcc0|MoAcc1|MoAcc2|      |      |                    |      |      |      |      |      |      |
+ * | CF12 | CF1  | CF2  | CF3  | CF4  | CF5  |                    | CF6  | CF7  | CF8  | CF9  | CF10 | CF11 |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      | Ins  |Mnu/Ap| Pscr |      |                    |WhLeft|WhDown| WhUp |WhRght|TappUp|      |
+ * |      |      |MoAcc2|MoAcc1|MoAcc0|      |                    |WhLeft|WhDown| WhUp |WhRght|TappUp|      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |Mouse3|Mouse2|Mouse1|CpsWrd|-------.    ,-------|MsLeft|MsDown| MsUp |MsRght|TappPr|      |
+ * |      |      |Mouse3|Mouse2|Mouse1|      |-------.    ,-------|MsLeft|MsDown| MsUp |MsRght|TappPr|ToBase|
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      | Undo |  Cut | Copy | Paste|      |-------|    |-------| Home |PgDown| PgUp | End  |TappDo|      |
+ * |      |      |      |      |      |      |-------|    |-------| Home |PgDown| PgUp | End  |TappDo|ToRais|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            |      |      |      |LOWER | /       /       \      \  |RAISE |      |      |      |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
 [_RAISE] = LAYOUT(
-  _______, KC_ACL0, KC_ACL1, KC_ACL2, _______, _______,                   _______, _______, _______, _______, _______, _______,
-  _______, XXXXXXX, KC_INS,  KC_APP,  KC_PSCR, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, DT_UP,   _______,
-  _______, _______, KC_BTN3, KC_BTN2, KC_BTN1, CW_TOGG,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, DT_PRNT, XXXXXXX,
-  _______, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE,XXXXXXX, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_DOWN, _______,
+  CT_F12,  CT_F1,   CT_F2,   CT_F3,   CT_F4,   CT_F5,                     CT_F6,   CT_F7,   CT_F8,   CT_F9,   CT_F10,  CT_F11,
+  _______, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, DT_UP,   _______,
+  _______, XXXXXXX, KC_BTN3, KC_BTN2, KC_BTN1, XXXXXXX,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, DT_PRNT, TOBASE,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_DOWN, TORAIS,
                     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |  W1  |  W2  |  W3  |  W4  |  W5  |                    |  W6  |  W7  |  W8  |  W9  |  W0  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | BOOT |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |  F12 |  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |MACWIN|      |      |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP|      |      |
+ * |ToBase| Ins  |Mnu/Ap| Pscr |CpsWrd|CpsLck|-------.    ,-------| PREV | VOL- | VOL+ | NEXT | PLAY | MUTE |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
+ * |ToThis|      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            |      |      |      |LOWER | /       /       \      \  |RAISE |      |      |      |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
 [_ADJUST] = LAYOUT(
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, CG_TOGG, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
-                    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+  XXXXXXX, OS_1,    OS_2,    OS_3,    OS_4,    OS_5,                      OS_6,    OS_7,    OS_8,    OS_9,    OS_0,    XXXXXXX,
+  KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
+  TOBASE,  KC_INS,  KC_APP,  KC_PSCR, CW_TOGG, KC_CAPS,                   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY, KC_MUTE,
+  TOADJU,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                    _______, _______, _______, XXXXXXX, _______, _______, XXXXXXX, _______, _______, _______
   )
 };
 
