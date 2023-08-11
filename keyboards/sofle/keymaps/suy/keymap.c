@@ -146,11 +146,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,----------------------------------------.                     ,-----------------------------------------.
  * | CF12 | CF1  | CF2  | CF3  | CF4  | CF5  |                    | CF6  | CF7  | CF8  | CF9  | CF10 | CF11 |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    | Home |PgDown| PgUp | End  |TappUp|      |
+ * |      |      |      |      |      |      |                    | Home |PgDown| PgUp | End  |TappUp| DEL  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------| LEFT | DOWN |  UP  | RIGHT|TappPr|ToBase|
+ * |ToBase|  OS  |  Alt | Ctrl | Shift|OSMAG |-------.    ,-------| LEFT | DOWN |  UP  | RIGHT|TappPr|ToBase|
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|CLEFT |CDOWN | CUP  |CRIGHT|TappDo|ToRais|
+ * |ToThis|      |      |      |      |      |-------|    |-------|CLEFT |CDOWN | CUP  |CRIGHT|TappDo|ToThis|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            |      |      |      |LOWER | /       /       \      \  |RAISE | PLAY | VOL- | VOL+ |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
@@ -164,9 +164,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_RAISE] = LAYOUT(
   CT_F12,  CT_F1,   CT_F2,   CT_F3,   CT_F4,   CT_F5,                     CT_F6,   CT_F7,   CT_F8,   CT_F9,   CT_F10,  CT_F11,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_UP,   _______,
-  _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, OSMAG,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, DT_PRNT, TOBASE,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, CT_LEFT, CT_DOWN, CT_UP,   CT_RGHT, DT_DOWN, TORAIS,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END,  DT_UP,   KC_DEL,
+  TOBASE,  KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, OSMAG,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, DT_PRNT, TOBASE,
+  TORAIS,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, CT_LEFT, CT_DOWN, CT_UP,   CT_RGHT, DT_DOWN, TORAIS,
                     _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU
 ),
 
