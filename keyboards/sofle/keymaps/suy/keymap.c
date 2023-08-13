@@ -5,6 +5,7 @@ enum sofle_layers {
     _LOWER,
     _RAISE,
     _ADJUST,
+    _MOUSE,
 };
 
 enum custom_keycodes {
@@ -18,10 +19,11 @@ enum custom_keycodes {
 
 // Setting a specific layer with TO, to make a layer "stick", and to allow to
 // return back to the base layer, like Miryoku does.
-#define TOBASE TO(_BASE)
-#define TOLOWR TO(_LOWER)
-#define TORAIS TO(_RAISE)
-#define TOADJU TO(_ADJUST)
+#define TOBASE DF(_BASE)
+#define TOLOWR DF(_LOWER)
+#define TORAIS DF(_RAISE)
+#define TOADJU DF(_ADJUST)
+#define TOMOUS DF(_MOUSE)
 
 
 // One shot modifiers.
@@ -58,6 +60,99 @@ enum custom_keycodes {
 #define OS_8  LGUI(KC_8)
 #define OS_9  LGUI(KC_9)
 #define OS_0  LGUI(KC_0)
+
+
+// Tap Dance ///////////////////////////////////////////////////////////////////
+
+// The kind of tap dances that we are normally going to use. Just tap and hold,
+// one or two times at best. Like in ZSA's Oryx.
+typedef enum {
+    UNKNOWN_KIND,
+    SINGLE_TAP = 1,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    DOUBLE_HOLD,
+    DOUBLE_SINGLE_TAP, // I think this is when two taps are not fast enough
+    MORE_TAPS
+} td_kind_t;
+
+// The function that decides the type of TD based on the state. Taken from Oryx.
+td_kind_t td_decide_kind(tap_dance_state_t* state) {
+    if (state->count == 1) {
+        if (state->interrupted || !state->pressed)
+            return SINGLE_TAP;
+        else
+            return SINGLE_HOLD;
+    } else if (state->count == 2) {
+        if (state->interrupted)
+            return DOUBLE_SINGLE_TAP;
+        else if (state->pressed)
+            return DOUBLE_HOLD;
+        else
+            return DOUBLE_TAP;
+    }
+    return MORE_TAPS;
+}
+
+typedef struct {
+    bool is_press_action;
+    td_kind_t kind;
+} td_tap_t;
+
+// The "list" of tap dances in the keymap.
+enum {
+    ENTER_LAYER,
+};
+
+// Definitions to be used later in the keymap.
+#define TD_ENTR TD(ENTER_LAYER)
+
+// The live state of each tap dance. Needs to be grown if more are added.
+static td_tap_t td_state[0];
+
+
+void on_td_for_enter_or_mouse(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 3) {
+        tap_code16(KC_ENTER);
+        tap_code16(KC_ENTER);
+        tap_code16(KC_ENTER);
+    }
+    if (state->count > 3) {
+        tap_code16(KC_ENTER);
+    }
+}
+
+void on_td_for_enter_or_mouse_finished(tap_dance_state_t *state, void *user_data) {
+    td_state[ENTER_LAYER].kind = td_decide_kind(state);
+    switch (td_state[ENTER_LAYER].kind) {
+        case SINGLE_TAP: register_code16(KC_ENTER); break;
+        case DOUBLE_TAP: register_code16(KC_ENTER); register_code16(KC_ENTER); break;
+        case DOUBLE_HOLD: layer_on(_MOUSE); break;
+        case DOUBLE_SINGLE_TAP: tap_code16(KC_ENTER); register_code16(KC_ENTER); break;
+        default: break;
+    }
+}
+
+void on_td_for_enter_or_mouse_reset(tap_dance_state_t *state, void *user_data) {
+    wait_ms(10);
+    switch (td_state[ENTER_LAYER].kind) {
+        case SINGLE_TAP: unregister_code16(KC_ENTER); break;
+        case DOUBLE_TAP: unregister_code16(KC_ENTER); break;
+        case DOUBLE_HOLD: layer_off(_MOUSE); break;
+        case DOUBLE_SINGLE_TAP: unregister_code16(KC_ENTER); break;
+        default: break;
+    }
+    td_state[ENTER_LAYER].kind = UNKNOWN_KIND;
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [ENTER_LAYER] = ACTION_TAP_DANCE_FN_ADVANCED(on_td_for_enter_or_mouse,
+            on_td_for_enter_or_mouse_finished, on_td_for_enter_or_mouse_reset)
+};
+
+
+
+// Tap Dance End ///////////////////////////////////////////////////////////////
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -103,7 +198,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   KC_ESC,  DUAL_A,  DUAL_S,  DUAL_D,  DUAL_F,  KC_G,                      KC_H,    DUAL_J,  DUAL_K,  DUAL_L,  DUAL__,  KC_QUOT,
   OSMS,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_MUTE, XXXXXXX, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
-                    OSMC,    OSMG,    OSMA,    LOWERL,  KC_ENT,  KC_SPC,  RAISEL,  KC_RCTL, KC_RALT, KC_RGUI
+                    OSMC,    OSMG,    OSMA,    LOWERL,  TD_ENTR, KC_SPC,  RAISEL,  KC_RCTL, KC_RALT, KC_RGUI
 ),
 
 
@@ -191,7 +286,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TOBASE,  KC_INS,  KC_APP,  KC_PSCR, CW_TOGG, KC_CAPS,                   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY, KC_MUTE,
   TOADJU,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                     _______, _______, _______, XXXXXXX, _______, _______, XXXXXXX, _______, _______, _______
-  )
+),
+
+[_MOUSE] = LAYOUT(
+  CT_F12,  CT_F1,   CT_F2,   CT_F3,   CT_F4,   CT_F5,                     CT_F6,   CT_F7,   CT_F8,   CT_F9,   CT_F10,  CT_F11,
+  _______, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, XXXXXXX, _______,
+  _______, XXXXXXX, KC_BTN3, KC_BTN2, KC_BTN1, XXXXXXX,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, TOBASE,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TOMOUS,
+                    _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX
+),
 };
 
 
@@ -209,7 +312,8 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_BASE]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_LOWER]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
     [_RAISE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
-    [_ADJUST]  = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) }
+    [_ADJUST]  = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
+    [_MOUSE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
 };
 #endif
 
@@ -239,7 +343,9 @@ static void print_status_narrow(void) {
     // NB: Lines with 5 characters dont't have a newline, because the text fills
     // the whole line by itself, and the next line would get an extra space.
     oled_write_P(PSTR("LAYER"), false);
-    switch (get_highest_layer(layer_state)) {
+    layer_state_t defaultLayer = get_highest_layer(default_layer_state);
+    layer_state_t layer = defaultLayer != _BASE ? defaultLayer : get_highest_layer(layer_state);
+    switch (layer) {
         case _BASE:
             oled_write_ln_P(PSTR("Base"), false);
             break;
@@ -251,6 +357,9 @@ static void print_status_narrow(void) {
             break;
         case _ADJUST:
             oled_write_P(PSTR("Adjst"), false);
+            break;
+        case _MOUSE:
+            oled_write_P(PSTR("Mouse"), false);
             break;
         default:
             oled_write_P(PSTR("Undef"), false);
