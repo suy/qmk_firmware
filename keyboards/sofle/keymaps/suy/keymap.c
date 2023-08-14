@@ -13,9 +13,12 @@ enum custom_keycodes {
     KC_NXTWD,
     KC_LSTRT,
     KC_LEND,
-    KC_DLINE
+    KC_DLINE,
+    KC_MOCK,
 };
 
+static bool mock_case = false;
+static bool mock_last_shifted = false;
 
 // Setting a specific layer with TO, to make a layer "stick", and to allow to
 // return back to the base layer, like Miryoku does.
@@ -284,7 +287,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, OS_1,    OS_2,    OS_3,    OS_4,    OS_5,                      OS_6,    OS_7,    OS_8,    OS_9,    OS_0,    XXXXXXX,
   KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
   TOBASE,  KC_INS,  KC_APP,  KC_PSCR, CW_TOGG, KC_CAPS,                   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY, KC_MUTE,
-  TOADJU,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  TOADJU,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MOCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                     _______, _______, _______, XXXXXXX, _______, _______, XXXXXXX, _______, _______, _______
 ),
 
@@ -394,7 +397,9 @@ static void print_status_narrow(void) {
     }
     if (is_caps_word_on()) {
         oled_write_ln_P(PSTR("CAPS WORD!"), false);
-    } else { // Needed to clear the previous caps word message
+    } else if (mock_case) {
+        oled_write_ln_P(PSTR("MoCk cASe!"), false);
+    } else { // Needed to clear the previous message
         oled_write_P(PSTR("\n\n"), false);
     }
 }
@@ -539,6 +544,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_Z);
             }
             return false;
+        case CW_TOGG:
+            mock_case = false;
+            return true; // Keep processing the key stroke.
+        case KC_MOCK:
+            if (!record->event.pressed) {
+                mock_case = !mock_case;
+                caps_word_off();
+            }
+            return false; // Don't process it any longer
+        case KC_A ... KC_Z:
+            if (!mock_case)
+                break;
+            if ((get_mods() & MOD_MASK_CTRL) ||
+                (get_mods() & MOD_MASK_ALT)  ||
+                (get_mods() & MOD_MASK_GUI))
+                break; // prevent any change if modifiers are pressed
+            if (record->event.pressed) {
+                // One out of 8, toggle the previous case.
+                // TODO: the probability doesn't seem very reliable. I still get
+                // a lot of repeated keys.
+                if ((rand() % 8) > 0) {
+                    mock_last_shifted = !mock_last_shifted;
+                }
+                if (mock_last_shifted)
+                    register_code(KC_LSFT);
+            } else {
+                if (mock_case)
+                    unregister_code(KC_LSFT);
+            }
+            break;
     }
     return true;
 }
