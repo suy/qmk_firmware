@@ -170,8 +170,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            | LCTR | LGUI | LAlt |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
- *            |      |      |      |      |/       /         \      \ |      |      |      |      |
+ *            | LCTR | LGUI | LAlt |LOWER | /Enter  /       \Space \  |RAISE | OSM  | LEFT | RGHT |
+ *            |      |      |      |      |/       /         \      \ |      |AltGr |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
 
@@ -201,7 +201,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   KC_ESC,  DUAL_A,  DUAL_S,  DUAL_D,  DUAL_F,  KC_G,                      KC_H,    DUAL_J,  DUAL_K,  DUAL_L,  DUAL__,  KC_QUOT,
   OSMS,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_MUTE, XXXXXXX, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
-                    OSMC,    OSMG,    OSMA,    LOWERL,  TD_ENTR, KC_SPC,  RAISEL,  KC_RCTL, KC_RALT, KC_RGUI
+                    OSMC,    OSMG,    OSMA,    LOWERL,  TD_ENTR, KC_SPC,  RAISEL,  OSMAG,   KC_LEFT, KC_RGHT
 ),
 
 
@@ -215,8 +215,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   ,  |   .  |   \  |   =  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            |      |      |      |LOWER | /       /       \   _  \  |RAISE | OSM  |      |      |
- *            |      |      |      |      |/       /         \      \ |      |AltGr |      |      |
+ *            |      |      |      |LOWER | /       /       \   _  \  |RAISE |      |      |      |
+ *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *             `----------------------------------'           '------''---------------------------'
  */
 
@@ -236,7 +236,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   KC_GRV,  DUAL_1,  DUAL_2,  DUAL_3,  DUAL_4,  KC_5,                      KC_LT,   KC_MINS, KC_PLUS, KC_GT,   DUAL_LB, KC_RBRC,
   _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, _______, _______, KC_BSLS, KC_EQUAL,
-                    _______, _______, _______, _______, _______, KC_UNDS, _______, OSMAG,   _______, _______
+                    _______, _______, _______, _______, _______, KC_UNDS, _______, _______, _______, _______
 ),
 
 
