@@ -8,7 +8,7 @@ for more options.
 #define DYNAMIC_TAPPING_TERM_INCREMENT 10 // How much the DT_UP key increases TAPPING_TERM
 
 #undef TAPPING_TERM
-#define TAPPING_TERM 260
+#define TAPPING_TERM 240
 
 #define ONESHOT_TAP_TOGGLE 5  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 4000  /* Time (in ms) before the one shot key is released */
