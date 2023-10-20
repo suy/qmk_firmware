@@ -213,7 +213,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   `  |   1  |   2  |   3  |   4  |   5  |-------.    ,-------|   <  |   -  |   +  |   >  |   [  |   ]  |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   ,  |   .  |   \  |   =  |
+ * | Space|   6  |   7  |   8  |   9  |   0  |-------|    |-------|   {  |   }  |   ,  |   .  |   \  |   =  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            |      |      |      |LOWER | /       /       \   _  \  |RAISE |      |      |      |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
@@ -235,7 +235,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
   KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   KC_GRV,  DUAL_1,  DUAL_2,  DUAL_3,  DUAL_4,  KC_5,                      KC_LT,   KC_MINS, KC_PLUS, KC_GT,   DUAL_LB, KC_RBRC,
-  _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, _______, _______, KC_BSLS, KC_EQUAL,
+  KC_SPC,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, KC_LCBR, KC_RCBR, _______, _______, KC_BSLS, KC_EQUAL,
                     _______, _______, _______, _______, _______, KC_UNDS, _______, _______, _______, _______
 ),
 
