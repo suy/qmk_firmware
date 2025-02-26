@@ -269,6 +269,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 
+// TODO: Having a key for Windows+1 is fine... but not if it's on the adjust
+// layer, that requires *two* thumb keys to be pressed. Because with home row
+// modifiers, Windows+1 is one key less in the main layer. Trading one pinky
+// with two thumbs is not worth it.
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |  W1  |  W2  |  W3  |  W4  |  W5  |                    |  W6  |  W7  |  W8  |  W9  |  W0  |      |
@@ -291,6 +295,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     _______, _______, _______, XXXXXXX, _______, _______, XXXXXXX, _______, _______, _______
 ),
 
+// TODO: document it? maybe not. But think about the button presses on the
+// thumbs, like with the Planck, and adding 'ToThis' and 'ToBase'.
+// Also: consider home row modifiers in this layer for "shift click drag", etc.
+// TODO: wait, why Ctrl+Fn again here? That's not useful. Replace or remove.
 [_MOUSE] = LAYOUT(
   CT_F12,  CT_F1,   CT_F2,   CT_F3,   CT_F4,   CT_F5,                     CT_F6,   CT_F7,   CT_F8,   CT_F9,   CT_F10,  CT_F11,
   _______, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, XXXXXXX, _______,
