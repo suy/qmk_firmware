@@ -15,7 +15,8 @@ for more options.
 
 #define TAPPING_TOGGLE 3
 
-#define MK_COMBINED // Mouse mode. Accelerated by default, constant when ACLx gets held.
+// #define MK_COMBINED // Mouse mode. Accelerated by default, constant when ACLx gets held.
+#define MK_KINETIC_SPEED
 
 #define ENCODER_DIRECTION_FLIP
 #ifdef ENCODER_RESOLUTION

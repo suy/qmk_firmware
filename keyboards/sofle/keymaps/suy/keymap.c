@@ -1,3 +1,25 @@
+// Note to self:
+// pip3 install --user --break-system-packages --upgrade qmk
+// make list-keyboards or qmk doctor to try it out if it works
+// pip3 install --user --break-system-packages -r requirements.txt
+// qmk compile -kb sofle -km suy
+//   or
+// qmk config user.keyboard=sofle
+// qmk config user.keymap=suy
+// qmk compile
+// qmk flash # (and press reset button)
+// Or...
+// make sofle:suy
+// make sofle:suy:flash
+
+// Some ideas for combos and "special" letters/punctuation:
+// https://fabiosirna.com/notes/2026/lets-split/
+// > H + J + K to type an em dash (—);
+// > H + J to type an en dash (–);
+// > N + M to type an interpunct dot (·)
+// The fucking "middle dot" is so important in Catalan, and I don't even know
+// how to type it with Eurkeys.
+
 #include QMK_KEYBOARD_H
 
 enum sofle_layers {
@@ -165,9 +187,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  | Del  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Bspc |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |------+------+------+------+------+------|        MicMute=F20 |------+------+------+------+------+------|
  * | ESC  |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
+ * |------+------+------+------+------+------|  MUTE |    | MIC_M |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            | LCTR | LGUI | LAlt |LOWER | /Enter  /       \Space \  |RAISE | OSM  | LEFT | RGHT |
@@ -200,7 +222,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   KC_ESC,  DUAL_A,  DUAL_S,  DUAL_D,  DUAL_F,  KC_G,                      KC_H,    DUAL_J,  DUAL_K,  DUAL_L,  DUAL__,  KC_QUOT,
-  OSMS,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_MUTE, XXXXXXX, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
+  OSMS,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_MUTE, KC_F20,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSMR,
                     OSMC,    OSMG,    OSMA,    LOWERL,  TD_ENTR, KC_SPC,  RAISEL,  OSMAG,   KC_LEFT, KC_RGHT
 ),
 
@@ -267,6 +289,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TORAIS,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, CT_LEFT, CT_DOWN, CT_UP,   CT_RGHT, DT_DOWN, TORAIS,
                     _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU
 ),
+// TODO: Ctrl+{left, down, up, right} is silly. I should use something better
+// like Alt+Tab, Ctrl+Tab, etc. Some nice one handed way to navigate if using
+// the left hand for the "mouse"/trackpad, etc.
+// Also, the Next/Previous mouse buttons might be helpful. But maybe belong
+// better to a Mouse layer?
 
 
 // TODO: Having a key for Windows+1 is fine... but not if it's on the adjust
@@ -304,9 +331,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, XXXXXXX, KC_ACL2, KC_ACL1, KC_ACL0, XXXXXXX,                   KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, XXXXXXX, _______,
   _______, XXXXXXX, KC_BTN3, KC_BTN2, KC_BTN1, XXXXXXX,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, TOBASE,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TOMOUS,
-                    _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX
+                    _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_BTN3, XXXXXXX, XXXXXXX
 ),
 };
+// TODO: add something in this layer about moving the mouse to different corners
+// in an absolute manner (requires buffs to the setup).
 
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -321,8 +350,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef ENCODER_MAP_ENABLE
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_BASE]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
-    [_LOWER]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
-    [_RAISE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
+    [_LOWER]   = { ENCODER_CCW_CW(KC_WH_L, KC_WH_R),           ENCODER_CCW_CW(_______, _______) },
+    [_RAISE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
     [_ADJUST]  = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
     [_MOUSE]   = { ENCODER_CCW_CW(_______, _______),           ENCODER_CCW_CW(_______, _______) },
 };
